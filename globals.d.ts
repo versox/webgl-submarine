@@ -16,4 +16,14 @@ declare module '*.obj' {
     export default value;
 }
 
+interface Locations {
+    a_vertices: number,
+    a_texture: number,
+    u_ctm: WebGLUniformLocation,
+    u_color: WebGLUniformLocation
+}
+
 declare var webglUtils: any;
+declare var gl: WebGL2RenderingContext;
+declare var locations: Locations;
+declare var vao: WebGLVertexArrayObject;

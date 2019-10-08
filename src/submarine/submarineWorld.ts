@@ -1,5 +1,8 @@
-import { SceneGraph } from "../tree/sceneGraph";
+import { SceneGraph } from "../sceneGraph/sceneGraph";
 import { Submarine } from "./submarine";
+import { CameraNode } from "../sceneGraph/cameraNode";
+import { vec3 } from "gl-matrix";
+import { Node } from "../sceneGraph/node";
 
 export class SubmarineWorld {
     sceneGraph: SceneGraph;
@@ -9,12 +12,19 @@ export class SubmarineWorld {
     }
 
     static createSubmarineWorld(gl: WebGL2RenderingContext) {
-        const submarineWorld: SubmarineWorld = new SubmarineWorld(SceneGraph.createSceneGraph());
-        submarineWorld.setup(gl);
+        const camera = new CameraNode();
+        // camera.setupProjection(
+        //     vec3.fromValues(-50, -50, -50),
+        //     vec3.fromValues(50, 50, 50)
+        // );
+        const submarineWorld: SubmarineWorld = new SubmarineWorld(new SceneGraph(new Node()));
+        submarineWorld.setup();
         return submarineWorld;
     }
 
-    setup(gl: WebGL2RenderingContext) {
-        this.sceneGraph.addChild(Submarine.createSubmarine(gl), this.sceneGraph.root);
+    setup() {
+        let sub = Submarine.createSubmarine();
+        this.sceneGraph.addChild(sub, this.sceneGraph.root);
+        // this.sceneGraph.addChild(Submarine.createSubmarine(gl), this.sceneGraph.root);
     }
 }

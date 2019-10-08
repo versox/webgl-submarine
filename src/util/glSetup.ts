@@ -12,12 +12,7 @@ export function createShader(gl: WebGL2RenderingContext, type: GLenum, source: s
     return undefined;
 }
 
-export interface Locations {
-    a_vertices: number,
-    a_texture: number,
-    u_ctm: WebGLUniformLocation,
-    u_color: WebGLUniformLocation
-}
+
 export function createProgram(gl: WebGL2RenderingContext, shaders: WebGLShader[]): WebGLProgram {
     var program = gl.createProgram();
     shaders.forEach(shader => {
@@ -33,19 +28,15 @@ export function createProgram(gl: WebGL2RenderingContext, shaders: WebGLShader[]
     return undefined;
 }
 
-export interface SetupValues {
-  locations: Locations,
-  vao: WebGLVertexArrayObject
-};
-export function setup(gl: WebGL2RenderingContext, program: WebGLProgram): SetupValues {
+export function setup(gl: WebGL2RenderingContext, program: WebGLProgram) {
   // Get memory location of shader variables  
-  const locations = {
+  (global as any).locations = {
       a_vertices: gl.getAttribLocation(program, 'a_vertices'),
       a_texture: gl.getAttribLocation(program, 'a_texture'),
       u_ctm: gl.getUniformLocation(program, 'u_ctm'),
       u_color: gl.getUniformLocation(program, 'u_color')
     };
-    const vao = gl.createVertexArray();
+    (global as any).vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
     gl.enableVertexAttribArray(locations.a_vertices);
     gl.enableVertexAttribArray(locations.a_texture);
@@ -54,8 +45,4 @@ export function setup(gl: WebGL2RenderingContext, program: WebGLProgram): SetupV
     // Tell WebGL how to convert from clip space to pixels
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.useProgram(program);
-    return {
-      locations,
-      vao
-    }
 }
