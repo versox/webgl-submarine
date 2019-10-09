@@ -12,5 +12,5 @@ out vec4 outColor;
 
 void main() {
   // Just set the output to a constant redish-purple
-  outColor = v_color;
+  outColor = u_color;
 }

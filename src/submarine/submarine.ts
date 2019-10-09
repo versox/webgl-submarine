@@ -13,25 +13,37 @@ export class Submarine extends DrawableNode {
     static createSubmarine(): Submarine {
         const sub = new Submarine(initMeshBuffers(gl, subMesh));
         console.log(sub);
-        keyboard.bind('w', sub.resetDelta, sub.goUp);
-        keyboard.bind('s', sub.resetDelta, sub.goDown);
+        keyboard.bind('ArrowUp', sub.resetDelta, sub.goUp);
+        keyboard.bind('ArrowDown', sub.resetDelta, sub.goDown);
+        keyboard.bind('ArrowRight', sub.resetDelta, sub.rotateClockwise);
+        keyboard.bind('ArrowLeft', sub.resetDelta, sub.rotateCounterClockwise);
         return sub;
     }
 
+    // TODO: Layer transformations so multiple can happen at once
+
     goUp = () => {
         mat4.set(this.deltaMatrix,
-            1.01, 0, 0, 0,
-            0, 1.01, 0, 0,
+            1.0, 0, 0, 0,
+            0, 1.0, 0, 0,
             0, 0, 1, 0,
-            0, 0.005, 0, 1);
+            0, 1, 0, 1);
         console.log(this.ctm);
     }
 
     goDown = () => {
         mat4.set(this.deltaMatrix,
-            0.99, 0, 0, 0,
-            0, 0.99, 0, 0,
+            1, 0, 0, 0,
+            0, 1, 0, 0,
             0, 0, 1, 0,
-            0, -0.005, 0, 1);
+            0, -1, 0, 1);
+    }
+
+    rotateClockwise = () => {
+        mat4.fromYRotation(this.deltaMatrix, 0.05);
+    }
+
+    rotateCounterClockwise = () => {
+        mat4.fromYRotation(this.deltaMatrix, -0.05);
     }
 }

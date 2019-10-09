@@ -18,6 +18,7 @@ export const keyboard = {
         }
     },
     keydown: (event: KeyboardEvent) => {
+        // console.log(event.key);
         const callback = (keyboard.callbacksDown as any)[event.key];
         if (!isNullOrUndefined(callback)) {
             callback();

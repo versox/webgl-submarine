@@ -1,8 +1,10 @@
 import { MeshWithBuffers, Mesh, initMeshBuffers } from "webgl-obj-loader";
 import { Node } from "./node";
+import { vec4 } from "gl-matrix";
 
 export class DrawableNode extends Node {
     mesh: MeshWithBuffers;
+    color: vec4 = null;
 
     constructor(mesh: MeshWithBuffers) {
         super();
@@ -43,6 +45,9 @@ export class DrawableNode extends Node {
             0,
             0
         );
+        if (this.color) {
+            gl.uniform4fv(locations.u_color, this.color);
+        }
         // Draw using the indices buffer (holds indices to vertexs and texture in order to draw faces)
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.mesh.indexBuffer)
         gl.drawElements(gl.TRIANGLES, this.mesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
