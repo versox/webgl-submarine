@@ -1,8 +1,8 @@
 import { MeshWithBuffers, Mesh, initMeshBuffers } from "webgl-obj-loader";
-import { Node } from "./node";
 import { vec4 } from "gl-matrix";
+import { ObjectNode } from "./objectNode";
 
-export class DrawableNode extends Node {
+export class DrawableNode extends ObjectNode {
     mesh: MeshWithBuffers;
     color: vec4 = null;
 
@@ -17,7 +17,7 @@ export class DrawableNode extends Node {
 
     // Visiting a drawable loads its mesh buffers and tells GL to draw them
     visit() {
-        // First visit node in order to adjust CTM
+        // First visit parent node class to adjust CTM
         super.visit();
         // tell the a_vertices attribute to use the vertex buffer
         gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.vertexBuffer);

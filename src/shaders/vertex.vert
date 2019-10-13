@@ -10,6 +10,6 @@ uniform mat4 u_ctm;
 
 void main() {
   gl_Position = u_ctm * a_vertices;
-  v_color = vec4(0.0784, 0.6745, 0.9529, 1.0);
+  v_color = vec4(0.5412, 0.5412, 0.5412, 1.0);
   // v_color = a_texture;
 }

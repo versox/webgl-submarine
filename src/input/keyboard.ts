@@ -8,20 +8,31 @@ export const keyboard = {
         document.onkeydown = this.keydown;
     },
     bind(char: string, upFn: Function, downFn: Function) {
-        this.callbacksUp[char] = upFn;
-        this.callbacksDown[char] = downFn;
+        const ups: Function[] = this.callbacksUp[char];
+        if (isNullOrUndefined(ups)) {
+            this.callbacksUp[char] = []; 
+        }
+        const downs: Function[] = this.callbacksDown[char];
+        if (isNullOrUndefined(downs)) {
+            this.callbacksDown[char] = [];
+        }
+        this.callbacksUp[char].push(upFn);
+        this.callbacksDown[char].push(downFn);
     },
     keyup(event: KeyboardEvent) {
-        const callback = (keyboard.callbacksUp as any)[event.key];
-        if (!isNullOrUndefined(callback)) {
-            callback();
+        const callbacks: Function[] = (keyboard.callbacksUp as any)[event.key];
+        if (!isNullOrUndefined(callbacks)) {
+            callbacks.forEach(c => {
+                c();
+            });
         }
     },
     keydown: (event: KeyboardEvent) => {
-        // console.log(event.key);
-        const callback = (keyboard.callbacksDown as any)[event.key];
-        if (!isNullOrUndefined(callback)) {
-            callback();
+        const callbacks: Function[] = (keyboard.callbacksDown as any)[event.key];
+        if (!isNullOrUndefined(callbacks)) {
+            callbacks.forEach(c => {
+                c();
+            });
         }
     }
 };
