@@ -1,5 +1,4 @@
 import { Node } from './node';
-import { isNullOrUndefined } from 'util';
 
 export class SceneGraph {
     root: Node;
@@ -13,6 +12,7 @@ export class SceneGraph {
         parent.children.push(child);
    }
 
+    // Do a depth first traversal of the scene graph and call visit() on each node
     traverse() {
         function visitNode(node: Node) {
             node.visit();

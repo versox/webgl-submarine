@@ -4,6 +4,7 @@ import { SubmarineWorld } from './submarine/submarineWorld';
 import vertexShader from './shaders/vertex.vert';
 import fragmentShader from './shaders/fragment.frag';
 import { keyboard } from './input/keyboard';
+import { setupHelp } from './help';
 
 function main() {
     const canvas = document.getElementById('canvas') as HTMLCanvasElement;
@@ -23,12 +24,12 @@ function main() {
     setup(gl, program);
     keyboard.setup();
 
-    // Set clear color to black, fully opaque
-    gl.clearColor(0.0, 0.0, 0.0, 0.0);
-    // Clear the color buffer with specified clear color
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    const submarineWorld = SubmarineWorld.createSubmarineWorld(gl);
+    // Setup world
+    const submarineWorld = SubmarineWorld.createSubmarineWorld();
+    // Setup draw cycle to traverse scene graph every 10ms
     setInterval(() => submarineWorld.sceneGraph.traverse(), 10);
+    // Setup help key
+    setupHelp();
   }
 
   window.onload = main;

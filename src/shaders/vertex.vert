@@ -3,13 +3,10 @@
 // an attribute is an input (in) to a vertex shader.
 // It will receive data from a buffer
 in vec4 a_vertices;
-in vec4 a_texture;
-out vec4 v_color;
+// in vec4 a_texture;
 
 uniform mat4 u_ctm;
 
 void main() {
   gl_Position = u_ctm * a_vertices;
-  v_color = vec4(0.5412, 0.5412, 0.5412, 1.0);
-  // v_color = a_texture;
 }

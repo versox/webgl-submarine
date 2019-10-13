@@ -1,4 +1,5 @@
 import ellipsoidMesh from '../models/ellipsoid.obj';
+import cubeMesh from '../models/cube.obj';
 
 import { DrawableNode } from "../sceneGraph/drawableNode";
 import { initMeshBuffers, MeshWithBuffers } from 'webgl-obj-loader';
@@ -24,10 +25,28 @@ export class Submarine extends DrawableNode {
         keyboard.bind('f', sub.stopTranslation('f'), sub.setTranslation('f', sub.goForward));
         keyboard.bind('b', sub.stopTranslation('b'), sub.setTranslation('b', sub.goBackwards));
 
+        const top = DrawableNode.createDrawableNode(ellipsoidMesh);
+        vec3.set(top.position, 0, 9, 0);
+        vec3.set(top.scale, 10, 5, 5);
+        top.color = vec4.fromValues(0.8941, 0.5216, 0.2196, 1.0);
+        sceneGraph.addChild(top, sub);
+
+        const nose = DrawableNode.createDrawableNode(ellipsoidMesh);
+        vec3.set(nose.position, 25, 0, 0);
+        vec3.set(nose.scale, 3, 5, 5);
+        nose.color = vec4.fromValues(0.8941, 0.5216, 0.2196, 1.0);
+        sceneGraph.addChild(nose, sub);
+
+        const propHolder = DrawableNode.createDrawableNode(cubeMesh);
+        vec3.set(propHolder.position, -20, 0, 0);
+        vec3.set(propHolder.scale, 15, 3, 3);
+        propHolder.color = vec4.fromValues(0.4471, 0.102, 0.7686, 1.0);
+        sceneGraph.addChild(propHolder, sub);
+
         const propPieceA = PropellerPiece.createPropeller();
-        const propPieceB = PropellerPiece.createPropeller();
-        propPieceB.angleX = 1.5708;
         sceneGraph.addChild(propPieceA, sub);
+        const propPieceB = PropellerPiece.createPropeller();
+        propPieceB.angleX = 1.5708; // 90deg
         sceneGraph.addChild(propPieceB, sub);
 
         return sub;
@@ -42,22 +61,22 @@ export class Submarine extends DrawableNode {
     }
 
     goForward = () => {
-        const x = Math.cos(this.angleY);
-        const z = Math.sin(this.angleY);
+        const x = Math.sin(this.angleY + 1.5708);
+        const z = Math.cos(this.angleY + 1.5708);
         vec3.add(this.position, this.position, vec3.fromValues(x, 0, z));
     }
 
     goBackwards = () => {
-        const x = Math.cos(this.angleY);
-        const z = Math.sin(this.angleY);
+        const x = Math.sin(this.angleY + 1.5708);
+        const z = Math.cos(this.angleY + 1.5708);
         vec3.sub(this.position, this.position, vec3.fromValues(x, 0, z));
     }
 
     rotateClockwise = () => {
-        this.angleY += 0.05;
+        this.angleY -= 0.05;
     }
 
     rotateCounterClockwise = () => {
-        this.angleY -= 0.05;
+        this.angleY += 0.05;
     }
 }

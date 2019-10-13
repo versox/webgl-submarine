@@ -4,7 +4,7 @@ import cubeMesh from '../models/cube.obj';
 import { SceneGraph } from "../sceneGraph/sceneGraph";
 import { Submarine } from "./submarine";
 import { CameraNode } from "../sceneGraph/cameraNode";
-import { vec3, mat4, vec4 } from "gl-matrix";
+import { vec3, vec4 } from "gl-matrix";
 import { DrawableNode } from "../sceneGraph/drawableNode";
 
 export class SubmarineWorld {
@@ -14,18 +14,23 @@ export class SubmarineWorld {
         this.sceneGraph = sceneGraph;
     }
 
-    static createSubmarineWorld(gl: WebGL2RenderingContext) {
+    static createSubmarineWorld() {
         const camera = new CameraNode();
-        camera.setupProjection(
-            vec3.fromValues(-50, -50, -50),
-            vec3.fromValues(50, 50, 50)
-        );
+        camera.setupCamera();
+        /* Create world / scene graph with a camera node at the root
+            (Camera)
+            /      \
+           sub    floor
+           /
+         parts...
+        */
         const submarineWorld: SubmarineWorld = new SubmarineWorld(new SceneGraph(camera));
         submarineWorld.setup();
         return submarineWorld;
     }
 
     setup() {
+        // Populate the world
         const floor = DrawableNode.createDrawableNode(floorMesh);
         floor.color = vec4.fromValues(1, 1, 1, 1);
         this.sceneGraph.addChild(floor, this.sceneGraph.root);

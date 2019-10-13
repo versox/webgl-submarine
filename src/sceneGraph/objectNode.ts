@@ -2,6 +2,9 @@ import { vec3, mat4 } from "gl-matrix";
 import { Node } from "./node";
 import { isNullOrUndefined } from "util";
 
+/* Represents a node that has position / orientation
+    and uses them to construct a Model transformation matrix that is applied to the CTM
+*/
 export class ObjectNode extends Node {
     position: vec3 = vec3.fromValues(0, 0 , 0);
     angleX = 0;
@@ -11,36 +14,11 @@ export class ObjectNode extends Node {
     // Change functions
     rotationFunctions: any = {};
     translationFunctions: any = {};
-
-    setRotation(key: string, rotationFunction: Function) {
-        return () => {
-            this.rotationFunctions[key] = rotationFunction;
-        }
-    }
-
-    stopRotation(key: string) {
-        return () => {
-            this.rotationFunctions[key] = null;
-        }
-    }
-
-    setTranslation(key: string, translationFunction: Function) {
-        return () => {
-            this.translationFunctions[key] = translationFunction;
-        }
-    }
-
-    stopTranslation(key: string) {
-        return () => {
-            this.translationFunctions[key] = null;
-        }
-    }
-
+    
     constructor() {
         super();
     }
 
-    // Visting an objectNode loads its mesh into buffers that the shaders can read to draw
     visit() {
         // Apply change to rotation / position
         for (var key in this.rotationFunctions) {
@@ -75,10 +53,59 @@ export class ObjectNode extends Node {
         mat4.fromTranslation(translationMatrix, this.position);
         mat4.multiply(this.matrix, translationMatrix, this.matrix);
 
+        /*
+            The matrix for this node is now made up of rotations and a translation
+            so that the rotations are applied first
+            M = translation * xRot * yRot * zRot * (p)
+
+            We use this as a Model transformation matrix and apply it to the CTM
+                camera (Projection and View)
+                /    \
+            object   object (Model transformation)
+
+            CTM = P * V * M * p
+
+            It's possible to have stacked model transformations in order to move
+            groups of things around that are positioned relative to eachother
+                camera
+                /
+             object (M1)
+                |
+             object (M2)
+
+             CTM = P * V * M1 * M2 * p
+
+             M2 is relative position to everything in M1
+        */
+
         // Visit node class in order to adjust CTM
         super.visit();
 
         // Apply scale
         mat4.fromScaling(this.matrix, this.scale);
+    }
+
+    setRotation(key: string, rotationFunction: Function) {
+        return () => {
+            this.rotationFunctions[key] = rotationFunction;
+        }
+    }
+
+    stopRotation(key: string) {
+        return () => {
+            this.rotationFunctions[key] = null;
+        }
+    }
+
+    setTranslation(key: string, translationFunction: Function) {
+        return () => {
+            this.translationFunctions[key] = translationFunction;
+        }
+    }
+
+    stopTranslation(key: string) {
+        return () => {
+            this.translationFunctions[key] = null;
+        }
     }
 }

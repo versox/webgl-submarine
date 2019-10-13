@@ -32,7 +32,7 @@ export function setup(gl: WebGL2RenderingContext, program: WebGLProgram) {
   // Get memory location of shader variables  
   (global as any).locations = {
       a_vertices: gl.getAttribLocation(program, 'a_vertices'),
-      a_texture: gl.getAttribLocation(program, 'a_texture'),
+      // a_texture: gl.getAttribLocation(program, 'a_texture'),
       u_ctm: gl.getUniformLocation(program, 'u_ctm'),
       u_color: gl.getUniformLocation(program, 'u_color')
     };

@@ -6,7 +6,11 @@ body {
 }
 
 #canvas {
-    width: 100vw;
-    height: 100vw;
+    width: 55vh;
+    height: 55vh;
     background-color: black;
+}
+
+.help {
+    font-size: 18px;
 }

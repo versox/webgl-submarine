@@ -2,6 +2,7 @@ import { MeshWithBuffers, Mesh, initMeshBuffers } from "webgl-obj-loader";
 import { vec4 } from "gl-matrix";
 import { ObjectNode } from "./objectNode";
 
+// Loads buffers with data and calls glDraw to execute shaders
 export class DrawableNode extends ObjectNode {
     mesh: MeshWithBuffers;
     color: vec4 = null;
@@ -15,9 +16,9 @@ export class DrawableNode extends ObjectNode {
         return new DrawableNode(initMeshBuffers(gl, mesh));
     }
 
-    // Visiting a drawable loads its mesh buffers and tells GL to draw them
+    // Visiting a drawable loads its mesh buffers and tells GL how to draw them
     visit() {
-        // First visit parent node class to adjust CTM
+        // First visit parent to determine position and adjust CTM
         super.visit();
         // tell the a_vertices attribute to use the vertex buffer
         gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.vertexBuffer);
@@ -35,16 +36,19 @@ export class DrawableNode extends ObjectNode {
             // offset: where to start
             0
         );
-        // same thing for texture
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.textureBuffer);
-        gl.vertexAttribPointer(
-            locations.a_texture,
-            3,
-            gl.FLOAT,
-            false,
-            0,
-            0
-        );
+
+                // in the future, same thing for the texture data
+                // gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.textureBuffer);
+                // gl.vertexAttribPointer(
+                //     locations.a_texture,
+                //     3,
+                //     gl.FLOAT,
+                //     false,
+                //     0,
+                //     0
+                // );
+        
+        // Load color into graphics card
         if (this.color) {
             gl.uniform4fv(locations.u_color, this.color);
         }

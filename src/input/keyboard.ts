@@ -19,6 +19,13 @@ export const keyboard = {
         this.callbacksUp[char].push(upFn);
         this.callbacksDown[char].push(downFn);
     },
+    bindDown(char: string, downFn: Function) {
+        const downs: Function[] = this.callbacksDown[char];
+        if (isNullOrUndefined(downs)) {
+            this.callbacksDown[char] = [];
+        }
+        this.callbacksDown[char].push(downFn);
+    },
     keyup(event: KeyboardEvent) {
         const callbacks: Function[] = (keyboard.callbacksUp as any)[event.key];
         if (!isNullOrUndefined(callbacks)) {

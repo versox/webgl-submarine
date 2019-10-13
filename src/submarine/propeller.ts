@@ -14,7 +14,7 @@ export class PropellerPiece extends DrawableNode {
     static createPropeller(): PropellerPiece {
         const propeller = new PropellerPiece(initMeshBuffers(gl, cubeMesh));
         vec3.set(propeller.scale, 5, 10, 2);
-        vec3.set(propeller.position, -24, 0, 0);
+        vec3.set(propeller.position, -34, 0, 0);
         propeller.color = vec4.fromValues(1, 0, 0, 1.0);
         keyboard.bind('s', propeller.stopRotation('s'), propeller.setRotation('s', propeller.spin));
         keyboard.bind('f', propeller.stopRotation('f'), propeller.setRotation('f', propeller.spin));
