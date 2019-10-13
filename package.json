@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack-dev-server --open"
   },
-  "author": "",
+  "author": "Carson Cass",
   "license": "ISC",
   "dependencies": {
     "@types/gl-matrix": "^2.4.5",
